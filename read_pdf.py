@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
 from PyPDF2 import PdfFileReader
-from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.keys import Keys
 import os
 import re
+import pandas as pd
 
 # browser = webdriver.Chrome()
 # browser.quit()
@@ -37,5 +35,9 @@ def get_symbols():
 
 if __name__ == '__main__':
 	symbols = get_symbols()
-	print(symbols)
-	print(len(symbols))
+	# print(symbols)
+	# print(len(symbols))
+
+	#pull data from Google Finance
+	data = pd.read_html('https://finance.google.com/finance?q=NASDAQ%3AGOOGL&fstype=ii&hl=en&ei=24jzWfCeL8PFjAGg35DgAw')
+	print(data)
