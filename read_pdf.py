@@ -37,7 +37,3 @@ if __name__ == '__main__':
 	symbols = get_symbols()
 	# print(symbols)
 	# print(len(symbols))
-
-	#pull data from Google Finance
-	data = pd.read_html('https://finance.google.com/finance?q=NASDAQ%3AGOOGL&fstype=ii&hl=en&ei=24jzWfCeL8PFjAGg35DgAw')
-	print(data)
