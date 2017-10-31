@@ -6,6 +6,7 @@ Format company financial data for analysis
 
 API pulls quarterly and Annual data.  Currently the API_Key allows for the Core Financial data
 
+Python3
 
 [] check status code
 [] pull data from api
