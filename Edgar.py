@@ -31,17 +31,26 @@ class Company(object):
 		self.symbol = symbol
 		self.API_Key = API_Key
 
-	def __str__(self):
-		return self.symbol
+		self.description = {}
 
 	def company_metadata(self):
 		base_url = 'http://edgaronline.api.mashery.com/v2/companies.json?'
+
 		website = base_url+'primarysymbols='+self.symbol+'&appkey='+ self.API_Key
 		r = requests.get(website)
-		test = r.json()
-		data = test['result']['rows']
+		data = json.loads(r.text)
+		company_data = data['result']['rows'][0]['values']
 
-		print(data[0]['values'])
+		#return company metadata values
+		for i in company_data:
+			self.description[i['field']] =  i['value']
+
+	def __str__(self):
+		return self.symbol
+
+	def __dict__(self):
+		return self.description
+
 
 class CashFlow(Company):
 
@@ -56,15 +65,15 @@ class CashFlow(Company):
 		corefinancials = {'annual':'corefinancials/ann', 'quarter':'corefinancials/qtr'}
 		numperiods = str(1) #default is 4 with Annual 
 
-		website =  base_url+corefinancials['annual']+'?primarysymbols='+self.symbol+'&numperiods='+numperiods+'&appkey='+API_Key
+		website =  base_url+corefinancials['annual']+'?primarysymbols='+self.symbol+'&appkey='+API_Key
 		r = requests.get(website)
-		# return r.status_code
+		data = json.loads(r.text)
+		company_data = data['result']['rows']
+		for i in company_data:
+			for j in i['values']:
+				print(j['field'], j['value'])
+			print()
 
-		test = r.text
-		# print(test['rows'])
-
-		value = pd.read_json(test, orient='columns')
-		print(value)
 
 	def quarterly_financials(self, symbol):
 		"""
@@ -96,8 +105,9 @@ class BalanceSheet(Company):
 		
 if __name__ == '__main__':
 	sample_company = Company('AAPL', API_Key)
-	print(sample_company.company_metadata())
+	sample_company.company_metadata()
+	print(sample_company.description)
 	
-	# sample_financials = CashFlow('FB', API_Key)
-	# # print(sample_financials.symbol)
-	# sample_financials.annual_financials()
+	sample_financials = CashFlow('FB', API_Key)
+	print(sample_financials.symbol)
+	sample_financials.annual_financials()
