@@ -45,7 +45,6 @@ class Company(object):
 		for i in company_data:
 			self.description[i['field']] =  i['value']
 
-		
 		df = pd.DataFrame.from_dict(self.description, orient='index')
 		return df
 
@@ -80,6 +79,7 @@ class CashFlow(Company):
 			for j in i['values']:
 				# print(j['field'], j['value'])
 				cashflow[j['field']] = j['value']
+			# print(len(cashflow))
 			df = pd.DataFrame.from_dict(cashflow, orient= 'index')
 			df_each_year.append(df)
 
@@ -120,6 +120,7 @@ class IncomeStatement(Company):
 			for j in i['values']:
 				# print(j['field'], j['value'])
 				incomestatement[j['field']] = j['value']
+			# print(len(incomestatement))
 			df = pd.DataFrame.from_dict(incomestatement, orient= 'index')
 			df_each_year.append(df)
 
@@ -156,6 +157,7 @@ class BalanceSheet(Company):
 			for j in i['values']:
 				# print(j['field'], j['value'])
 				balancesheet[j['field']] = j['value']
+			# print(len(balancesheet))
 			df = pd.DataFrame.from_dict(balancesheet, orient= 'index')
 			df_each_year.append(df)
 
@@ -165,18 +167,18 @@ class BalanceSheet(Company):
 		pass
 		
 if __name__ == '__main__':
-	sample_company = Company('FB', API_Key)
-	print(sample_company.company_metadata())
+	sample_company = Company('AAPL', API_Key)
+	# print(sample_company.company_metadata())
 
 	
-	sample_cash = CashFlow('FB', API_Key)
-	print(sample_cash.symbol)
-	print(sample_cash.annual_financials())
+	sample_cash = CashFlow('AAPL', API_Key)
+	# print(sample_cash.symbol)
+	sample_cash.annual_financials()
 
-	sample_income = IncomeStatement('FB', API_Key)
-	print(sample_income.symbol)
-	print(sample_income.annual_financials())
+	sample_income = IncomeStatement('AAPL', API_Key)
+	# print(sample_income.symbol)
+	sample_income.annual_financials()
 
-	sample_balance = BalanceSheet('FB', API_Key)
-	print(sample_balance.symbol)
-	print(sample_balance.annual_financials())
+	sample_balance = BalanceSheet('AAPL', API_Key)
+	# print(sample_balance.symbol)
+	sample_balance.annual_financials()
