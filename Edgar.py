@@ -51,28 +51,28 @@ class Company(object):
 	def __str__(self):
 		return self.symbol
 
-class CashFlow(Company):
+class Financials(Company):
 
 	def __init__(self, symbol, API_Key):
 		Company.__init__(self, symbol, API_Key)
 
-	def annual_financials(self): 
+	def financials(self, statement= None, period= None): 
 		"""
 		Return annual financials
 		"""
 		base_url = 'http://edgaronline.api.mashery.com/v2/'
-		corefinancials = {'annual':'corefinancials/ann', 'quarter':'corefinancials/qtr'}
-		statement = 'CashFlowStatementConsolidated'
-		numperiods = str(1) #default is 4 with Annual 
+		corefinancials = {'Annual':'corefinancials/ann', 'Quarter':'corefinancials/qtr'}
+		financialstatement = {'CashFlow':'CashFlowStatementConsolidated', 'BalanceSheet':'BalanceSheetConsolidated', 'IncomeStatement':'IncomeStatementConsolidated'}
 
-		website =  base_url+corefinancials['annual']+'?primarysymbols='+self.symbol+'&fields='+statement+'&appkey='+API_Key
+		website =  base_url+corefinancials[period]+'?primarysymbols='+self.symbol+'&fields='+financialstatement[statement]+'&appkey='+API_Key
 		r = requests.get(website)
 		data = json.loads(r.text)
 
-		# Need to combine each year to individual df and concat to other years
-		
-		df_each_year = []
+		#only works if you run metadata function in super class
+		print(self.description)
 
+		# Need to combine each year to individual df and concat to other years
+		df_each_year = []
 		company_data = data['result']['rows']
 		for i in company_data:
 			cashflow = {}
@@ -92,95 +92,10 @@ class CashFlow(Company):
 		"""
 		pass
 
-class IncomeStatement(Company):
-	"""docstring for IncomeStatement"""
-	def __init__(self, symbol, API_Key):
-		Company.__init__(self, symbol, API_Key)
-
-	def annual_financials(self):
-		"""
-		Return annual financials
-		"""
-		base_url = 'http://edgaronline.api.mashery.com/v2/'
-		corefinancials = {'annual':'corefinancials/ann', 'quarter':'corefinancials/qtr'}
-		statement = 'IncomeStatementConsolidated'
-		numperiods = str(1) #default is 4 with Annual 
-
-		website =  base_url+corefinancials['annual']+'?primarysymbols='+self.symbol+'&fields='+statement+'&appkey='+API_Key
-		r = requests.get(website)
-		data = json.loads(r.text)
-
-		# Need to combine each year to individual df and concat to other years
-		
-		df_each_year = []
-
-		company_data = data['result']['rows']
-		for i in company_data:
-			incomestatement = {}
-			for j in i['values']:
-				# print(j['field'], j['value'])
-				incomestatement[j['field']] = j['value']
-			# returns df without fiscal year as column headers
-			df = pd.DataFrame.from_dict(incomestatement, orient= 'index')
-			df_each_year.append(df)
-
-		return pd.concat(df_each_year[::-1], axis=1)
-
-	def quarterly(self):
-		pass
-
-
-class BalanceSheet(Company):
-	def __init__(self, symbol,API_Key):
-		Company.__init__(self, symbol, API_Key)
-
-	def annual_financials(self):
-		"""
-		Return annual financials
-		"""
-		base_url = 'http://edgaronline.api.mashery.com/v2/'
-		corefinancials = {'annual':'corefinancials/ann', 'quarter':'corefinancials/qtr'}
-		statement = 'BalanceSheetConsolidated'
-		numperiods = str(1) #default is 4 with Annual 
-
-		website =  base_url+corefinancials['annual']+'?primarysymbols='+self.symbol+'&fields='+statement+'&appkey='+API_Key
-		r = requests.get(website)
-		data = json.loads(r.text)
-
-		# Need to combine each year to individual df and concat to other years
-		
-		df_each_year = []
-
-		company_data = data['result']['rows']
-		for i in company_data:
-			balancesheet = {}
-			for j in i['values']:
-				# print(j['field'], j['value'])
-				balancesheet[j['field']] = j['value']
-			# print(len(balancesheet))
-			df = pd.DataFrame.from_dict(balancesheet, orient= 'index')
-			df_each_year.append(df)
-
-		return pd.concat(df_each_year[::-1], axis=1)
-
-	def quarterly(self):
-		pass
 		
 if __name__ == '__main__':
-	# sample_company = Company('AAPL', API_Key)
-	# print(sample_company.company_metadata())
-
-	
-	# sample_cash = CashFlow('AAPL', API_Key)
-	# print(sample_cash.symbol)
-	# sample_cash.annual_financials()
-
-	# sample_income = IncomeStatement('AAPL', API_Key)
-	# # print(sample_income.symbol)
-	# df = sample_income.annual_financials()
-	# print(df)
-
-	# sample_balance = BalanceSheet('AAPL', API_Key)
-	# print(sample_balance.symbol)
-	# sample_balance.annual_financials()
-	
+	sample_financials = Financials('AAPL', API_Key)
+	# print(sample_financials.symbol)
+	sample_financials.company_metadata()
+	statement = sample_financials.financials(period='Annual', statement ='BalanceSheet')
+	print(statement)
