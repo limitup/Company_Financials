@@ -51,6 +51,7 @@ class Company(object):
 	def __str__(self):
 		return self.symbol
 
+
 class Financials(Company):
 
 	def __init__(self, symbol, API_Key):
@@ -68,9 +69,6 @@ class Financials(Company):
 		r = requests.get(website)
 		data = json.loads(r.text)
 
-		#only works if you run metadata function in super class
-		print(self.description)
-
 		# Need to combine each year to individual df and concat to other years
 		df_each_year = []
 		company_data = data['result']['rows']
@@ -85,17 +83,10 @@ class Financials(Company):
 
 		return pd.concat(df_each_year[::-1], axis=1)
 
-
-	def quarterly_financials(self, symbol):
-		"""
-		Return company quarter financials
-		"""
-		pass
-
 		
 if __name__ == '__main__':
 	sample_financials = Financials('AAPL', API_Key)
 	# print(sample_financials.symbol)
 	sample_financials.company_metadata()
-	statement = sample_financials.financials(period='Annual', statement ='BalanceSheet')
+	statement = sample_financials.financials(period='Annual', statement ='IncomeStatement')
 	print(statement)
