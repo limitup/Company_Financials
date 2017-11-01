@@ -79,11 +79,11 @@ class CashFlow(Company):
 			for j in i['values']:
 				# print(j['field'], j['value'])
 				cashflow[j['field']] = j['value']
-			# print(len(cashflow))
+			# returns df without fiscal year as column headers
 			df = pd.DataFrame.from_dict(cashflow, orient= 'index')
 			df_each_year.append(df)
 
-		return pd.concat(df_each_year[::-1], axis=1).to_csv('CashFlow.csv')
+		return pd.concat(df_each_year[::-1], axis=1)
 
 
 	def quarterly_financials(self, symbol):
@@ -120,11 +120,11 @@ class IncomeStatement(Company):
 			for j in i['values']:
 				# print(j['field'], j['value'])
 				incomestatement[j['field']] = j['value']
-			# print(len(incomestatement))
+			# returns df without fiscal year as column headers
 			df = pd.DataFrame.from_dict(incomestatement, orient= 'index')
 			df_each_year.append(df)
 
-		return pd.concat(df_each_year[::-1], axis=1).to_csv('IncomeStatement.csv')
+		return pd.concat(df_each_year[::-1], axis=1)
 
 	def quarterly(self):
 		pass
@@ -161,24 +161,26 @@ class BalanceSheet(Company):
 			df = pd.DataFrame.from_dict(balancesheet, orient= 'index')
 			df_each_year.append(df)
 
-		return pd.concat(df_each_year[::-1], axis=1).to_csv('BalanceSheet.csv')
+		return pd.concat(df_each_year[::-1], axis=1)
 
 	def quarterly(self):
 		pass
 		
 if __name__ == '__main__':
-	sample_company = Company('AAPL', API_Key)
+	# sample_company = Company('AAPL', API_Key)
 	# print(sample_company.company_metadata())
 
 	
-	sample_cash = CashFlow('AAPL', API_Key)
+	# sample_cash = CashFlow('AAPL', API_Key)
 	# print(sample_cash.symbol)
-	sample_cash.annual_financials()
+	# sample_cash.annual_financials()
 
-	sample_income = IncomeStatement('AAPL', API_Key)
-	# print(sample_income.symbol)
-	sample_income.annual_financials()
+	# sample_income = IncomeStatement('AAPL', API_Key)
+	# # print(sample_income.symbol)
+	# df = sample_income.annual_financials()
+	# print(df)
 
-	sample_balance = BalanceSheet('AAPL', API_Key)
+	# sample_balance = BalanceSheet('AAPL', API_Key)
 	# print(sample_balance.symbol)
-	sample_balance.annual_financials()
+	# sample_balance.annual_financials()
+	
