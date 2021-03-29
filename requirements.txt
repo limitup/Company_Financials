@@ -69,7 +69,7 @@ pnumpy==1.4.0
 pyasn1==0.2.3
 pycparser==2.17
 pyfolio==0.5.1
-Pygments==2.1.1
+Pygments==2.7.4
 pyOpenSSL==16.2.0
 pyparsing==2.2.0
 PyPDF2==1.26.0
