@@ -49,7 +49,7 @@ more-itertools==3.0.0
 mpi4py==2.0.0
 mpmath==0.19
 multipledispatch==0.4.8
-nbconvert==4.1.0
+nbconvert==6.3.0
 nbformat==4.0.1
 ndg-httpsclient==0.4.2
 networkx==1.11
